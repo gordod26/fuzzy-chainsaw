@@ -1,0 +1,62 @@
+mutation LoginMutation($loginEmail: String!, $loginPassword: String!) {
+  login(email: "david@prisma.io", password: "graphql") {
+    token
+  }
+}
+
+mutation ($postUrl: String!, $postDescription: String!) {
+  post(url: "www.THIISIT.com", description: "THE MOMENT OF TRUTH") {
+    id
+    description
+    url
+    votes {
+      id
+      post {
+        id
+        description
+        url
+      }
+    }
+  }
+}
+
+mutation VoteMutation($votePostId: ID!) {
+  vote(postId: "62") {
+    id
+    post {
+      id
+      description
+      url
+      votes {
+        id
+      }
+    }
+  }
+}
+
+subscription Subscription {
+  newVote {
+    id
+    post {
+      id
+      description
+      url
+      votes {
+        id
+      }
+    }
+    user {
+      id
+      name
+      email
+    }
+  }
+}
+
+subscription Subscription {
+  newPost {
+    id
+    description
+    url
+  }
+}
