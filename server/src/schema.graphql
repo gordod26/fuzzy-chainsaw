@@ -1,6 +1,8 @@
 type Query {
   info: String!
   feed(filter: String, skip: Int, take: Int, orderBy: PostOrderByInput): Feed!
+  chapter(translation: String!, b: Int!, c: Int!): Chapter!
+  verse(translation: String!, id: Int!): Verse!
 }
 
 type Feed {
@@ -143,6 +145,18 @@ type Mutation {
   createTYlt(b: Int!, c: Int!, v: Int!, t: String!): TYlt
   updateTYlt(id: Int, b: Int, c: Int, v: Int, t: String): TYlt
   deleteTYlt(id: Int!): GenericResponse
+}
+
+type Verse {
+  id: Int!
+  b: Int!
+  c: Int!
+  v: Int!
+  t: String!
+}
+
+type Chapter {
+  c: [Verse!]!
 }
 
 type TAsv {
