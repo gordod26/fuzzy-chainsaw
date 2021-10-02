@@ -1,17 +1,42 @@
-import React, { JSXElementConstructor } from "react";
+import React, { JSXElementConstructor, useEffect } from "react";
 import bible from "../data/kjv.json";
 import { useContext } from "react";
 import { observer } from "mobx-react";
 import StoresContext from "../util/context";
+import { useQuery, gql } from "@apollo/client";
 
 type AppProps = {
   chapter: string;
   e: void;
 };
 
+const CHAPTER_QUERY = gql`
+  query Query($chapterTranslation: String!, $chapterB: Int!, $chapterC: Int!) {
+    chapter(translation: $chapterTranslation, b: $chapterB, c: $chapterC) {
+      c {
+        id
+        b
+        c
+        v
+        t
+      }
+    }
+  }
+`;
+
 const Bible = observer(function Bible() {
+  const { loading, error, data } = useQuery(CHAPTER_QUERY, {
+    variables: {
+      chapterTranslation: "t_asv",
+      chapterC: 1,
+      chapterB: 1,
+    },
+  });
   const store = useContext(StoresContext);
 
+  useEffect(() => {
+    console.log("myquery", data.chapter.c);
+  }, [data]);
   const textHandler = (text: Array<{ verse: string; text: string }>) => {
     return text.map((t) => {
       return (
