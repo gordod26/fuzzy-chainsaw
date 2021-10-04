@@ -11,42 +11,53 @@ type AppProps = {
 };
 
 const CHAPTER_QUERY = gql`
-  query Query($chapterTranslation: String!, $chapterB: Int!, $chapterC: Int!) {
+  query Query(
+    $bookB: Int!
+    $chapterTranslation: String!
+    $chapterB: Int!
+    $chapterC: Int!
+  ) {
+    book(b: $bookB) {
+      n
+    }
     chapter(translation: $chapterTranslation, b: $chapterB, c: $chapterC) {
       c {
-        id
         b
         c
         v
         t
+        id
       }
     }
   }
 `;
 
 const Bible = observer(function Bible() {
+  const store = useContext(StoresContext);
   const { loading, error, data } = useQuery(CHAPTER_QUERY, {
     variables: {
-      chapterTranslation: "t_asv",
+      chapterTranslation: store.bibleStore.translation,
       chapterC: 1,
       chapterB: 1,
+      bookB: 1,
     },
   });
-  const store = useContext(StoresContext);
 
   useEffect(() => {
-    console.log("myquery", data.chapter.c);
+    store.bibleStore.handleData(data);
+
+    console.log("GQL query", data);
   }, [data]);
-  const textHandler = (text: Array<{ verse: string; text: string }>) => {
+  const textHandler = (text: Array<{ v: string; t: string }>) => {
     return text.map((t) => {
       return (
         <div
           className={`${
             store.refStore.yellowVerses.some(
               (item) =>
-                item.verse === t.verse &&
-                item.book === bible.book &&
-                bible.chapters[0].chapter === item.chapter
+                item.verse === t.v &&
+                item.book === data.book.n &&
+                data.chapter.c[0].c === item.chapter
             )
               ? "bg-yellow-200"
               : "bg-transparent"
@@ -54,32 +65,42 @@ const Bible = observer(function Bible() {
           //adds verses to set of selected verses
           onClick={() => {
             store.refStore.yellowVersesHandler(
-              bible.book,
-              bible.chapters[0].chapter,
-              t.verse
+              data.book.n,
+              data.chapter.c[0].c,
+              t.v
             );
             //console.log(bible.book, bible.chapters[0].chapter, ":", t.verse);
           }}
         >
           {" "}
-          <sup>{JSON.stringify(t.verse).replace(/^"|"$/g, "")}</sup>
-          <span>{JSON.stringify(t.text).replace(/^"|"$/g, "")}</span>
+          <sup>{t.v}</sup>
+          <span>{t.t}</span>
         </div>
       );
     });
   };
 
   return (
-    <div className={"overflow-auto h-full"}>
-      <h1 className={"text-center text-5xl py-7 font-bold"}>
-        {JSON.stringify(bible.book.toUpperCase()).replace(/^"|"$/g, "")}
-      </h1>
-      <div className="w-3/5 h-full m-auto ">
-        <h2 className={"text-7xl float-left inline px-3"}>
-          {JSON.stringify(bible.chapters[0].chapter).replace(/^"|"$/g, "")}
-        </h2>
-        {textHandler(bible.chapters[0].verses)}
-      </div>
+    <div>
+      {loading ? (
+        <h1>Loading</h1>
+      ) : error ? (
+        <h1>error</h1>
+      ) : (
+        <div className={"overflow-auto h-full"}>
+          <h1 className={"text-center text-5xl py-7 font-bold"}>
+            {JSON.stringify(data.book.n).replace(/^"|"$/g, "")}
+          </h1>
+          <div className="transition-opacity w-3/5 h-full m-auto ">
+            <h2 className={"text-7xl float-left inline px-3"}>
+              {JSON.stringify(data.chapter.c[0].c).replace(/^"|"$/g, "")}
+            </h2>
+            {store.bibleStore.data
+              ? textHandler(store.bibleStore.data.chapter.c)
+              : textHandler(data.chapter.c)}
+          </div>
+        </div>
+      )}
     </div>
   );
 });
