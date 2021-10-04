@@ -30,7 +30,22 @@ async function chapter(parent, args, context, info) {
   return chapter;
 }
 
+async function book(parent, args, context, info) {
+  const query = await db("key_english")
+    .where({
+      b: args.b,
+    })
+    .select();
+
+  //console.log("book", query[0]);
+
+  const b = query[0].b;
+  const n = query[0].n;
+  return { b, n };
+}
+
 module.exports = {
   verse,
   chapter,
+  book,
 };

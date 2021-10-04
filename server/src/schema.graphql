@@ -2,6 +2,7 @@ type Query {
   info: String!
   feed(filter: String, skip: Int, take: Int, orderBy: PostOrderByInput): Feed!
   chapter(translation: String!, b: Int!, c: Int!): Chapter!
+  book(b: Int!): KeyEnglish!
   verse(translation: String!, id: Int!): Verse!
 }
 

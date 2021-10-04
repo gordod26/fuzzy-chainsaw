@@ -1,4 +1,4 @@
-const { verse, chapter } = require("./bible/Query");
+const { verse, chapter, book } = require("./bible/Query");
 
 async function feed(parent, args, context, info) {
   const where = args.filter
@@ -23,4 +23,5 @@ module.exports = {
   feed,
   verse,
   chapter,
+  book,
 };
