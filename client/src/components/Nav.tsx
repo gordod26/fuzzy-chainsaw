@@ -21,7 +21,7 @@ const Nav = observer(function Nav() {
         </div>
       )}
       {/* Nav container */}
-      <div className={"flex justify-center flex-initial w-4/5 m-auto"}>
+      <div className="flex justify-center flex-initial w-4/5 m-auto">
         <IconMenuComments />
         {/*up button*/}
         <button
@@ -88,7 +88,7 @@ const Nav = observer(function Nav() {
       {store.navStore.navPosition === "bottom" ? (
         ""
       ) : (
-        <div className={"overflow-auto flex-1"}>
+        <div className={"border-t border-dashed overflow-auto flex-1"}>
           <Comments />
         </div>
       )}
