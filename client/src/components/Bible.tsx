@@ -42,41 +42,8 @@ const Bible = observer(function Bible() {
   });
 
   useEffect(() => {
-    store.bibleStore.handleData(data);
-
     console.log("GQL query", data);
   }, [data]);
-  const textHandler = (text: Array<{ v: string; t: string }>) => {
-    return text.map((t) => {
-      return (
-        <div
-          className={`${
-            store.refStore.yellowVerses.some(
-              (item) =>
-                item.verse === t.v &&
-                item.book === data.book.n &&
-                data.chapter.c[0].c === item.chapter
-            )
-              ? "bg-yellow-200"
-              : "bg-transparent"
-          } inline`}
-          //adds verses to set of selected verses
-          onClick={() => {
-            store.refStore.yellowVersesHandler(
-              data.book.n,
-              data.chapter.c[0].c,
-              t.v
-            );
-            //console.log(bible.book, bible.chapters[0].chapter, ":", t.verse);
-          }}
-        >
-          {" "}
-          <sup>{t.v}</sup>
-          <span>{t.t}</span>
-        </div>
-      );
-    });
-  };
 
   return (
     <div>
