@@ -9,16 +9,17 @@ type Translation =
   | "t_web"
   | "t_ylt";
 
-export default class NavStore {
+export default class BibleStore {
   constructor() {
     makeAutoObservable(this);
   }
 
   translation: Translation = "t_kjv";
+  b: number = 1;
+  c: number = 1;
 
   handleTranslation(e: Translation) {
     this.translation = e;
     console.log(e);
   }
-
 }

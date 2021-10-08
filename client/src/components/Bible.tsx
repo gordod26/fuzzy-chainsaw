@@ -4,29 +4,26 @@ import { useContext } from "react";
 import { observer } from "mobx-react";
 import StoresContext from "../util/context";
 import { useQuery, gql } from "@apollo/client";
-
-type AppProps = {
-  chapter: string;
-  e: void;
-};
+import BibleTextHandler from "./BibleTextHandler";
 
 const CHAPTER_QUERY = gql`
-  query Query(
+  query QueryBible(
     $bookB: Int!
     $chapterTranslation: String!
     $chapterB: Int!
     $chapterC: Int!
   ) {
     book(b: $bookB) {
+      b
       n
     }
     chapter(translation: $chapterTranslation, b: $chapterB, c: $chapterC) {
       c {
+        id
         b
         c
         v
         t
-        id
       }
     }
   }
@@ -35,11 +32,12 @@ const CHAPTER_QUERY = gql`
 const Bible = observer(function Bible() {
   const store = useContext(StoresContext);
   const { loading, error, data } = useQuery(CHAPTER_QUERY, {
+    fetchPolicy: "no-cache",
     variables: {
       chapterTranslation: store.bibleStore.translation,
-      chapterC: 1,
-      chapterB: 1,
-      bookB: 1,
+      chapterC: store.bibleStore.c,
+      chapterB: store.bibleStore.b,
+      bookB: store.bibleStore.b,
     },
   });
 
@@ -82,11 +80,9 @@ const Bible = observer(function Bible() {
 
   return (
     <div>
-      {loading ? (
-        <h1>Loading</h1>
-      ) : error ? (
-        <h1>error</h1>
-      ) : (
+      {loading && <></>}
+      {error && <p>ERROR, {error}</p>}
+      {data && (
         <div className={"overflow-auto h-full"}>
           <h1 className={"text-center text-5xl py-7 font-bold"}>
             {JSON.stringify(data.book.n).replace(/^"|"$/g, "")}
@@ -95,9 +91,7 @@ const Bible = observer(function Bible() {
             <h2 className={"text-7xl float-left inline px-3"}>
               {JSON.stringify(data.chapter.c[0].c).replace(/^"|"$/g, "")}
             </h2>
-            {store.bibleStore.data
-              ? textHandler(store.bibleStore.data.chapter.c)
-              : textHandler(data.chapter.c)}
+            <BibleTextHandler data={data} />;
           </div>
         </div>
       )}
