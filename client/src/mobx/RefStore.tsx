@@ -18,7 +18,7 @@ export default class RefStore {
     console.log("RefStore", "logVerse", e);
   }
   // push or remove verse from selected verse
-  yellowVersesHandler(book: string, chapter: string, verse: string) {
+  yellowVersesHandler(book: string, chapter: number, verse: string) {
     const obj = { book: book, chapter: chapter, verse: verse };
     const index = this.yellowVerses.findIndex(
       (item) =>
