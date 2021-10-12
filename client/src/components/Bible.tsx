@@ -58,7 +58,7 @@ const Bible = observer(function Bible() {
             <h2 className={"text-7xl float-left inline px-3"}>
               {JSON.stringify(data.chapter.c[0].c).replace(/^"|"$/g, "")}
             </h2>
-            <BibleTextHandler data={data} />;
+            <BibleTextHandler data={data} />
           </div>
         </div>
       )}
