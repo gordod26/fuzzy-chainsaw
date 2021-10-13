@@ -1,7 +1,7 @@
 import React from "react";
 import Avatar from "boring-avatars";
 
-const CommentCard = (): JSX.Element => {
+const CommentCard = (props: any): JSX.Element => {
   return (
     <div className="flex justify-left items-start mb-5">
       <div className="self-start mt-0">
@@ -15,19 +15,14 @@ const CommentCard = (): JSX.Element => {
       <div className={"flex flex-col pl-3 text-sm"}>
         <div>
           <p className={" font-extralight"}>
-            commentBoi879
+            {props.username}
             <span className="ml-3">
               <span></span>5h
             </span>
           </p>
         </div>
         <div>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-            eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-            ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
-            aliquip ex ea commodo consequat.
-          </p>
+          <p>{props.post}</p>
         </div>
         <div className={"inline"}>
           {/*up button*/}
