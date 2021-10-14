@@ -1,11 +1,14 @@
 import Avatar from "boring-avatars";
 import StoresContext from "../util/context";
 import { observer } from "mobx-react";
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { gql, useMutation } from "@apollo/client";
 
-interface IProps {
+export interface IProps {
   name: "Register" | "Login";
+  username?: string;
+  password?: string;
+  email?: string;
 }
 
 const Register = gql`
@@ -32,15 +35,57 @@ const Login = gql`
     }
   }
 `;
+const RegisterHandler = observer(function RegisterHandler(props: IProps) {
+  const store = useContext(StoresContext);
+  const [registerFunction, { data, loading, error }] = useMutation(Register);
+  const registerHelper = () => {
+    registerFunction({
+      variables: {
+        email: props.email,
+        name: props.username,
+        password: props.password,
+      },
+    });
+  };
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+    }
+  });
+
+  return (
+    <div
+      className="modal-action"
+      onClick={() => {
+        registerHelper();
+      }}
+    >
+      <label htmlFor={`${props.name}-modal`} className="btn btn-ghost">
+        Accept
+      </label>
+      <label htmlFor={`${props.name}-modal`} className="btn btn-ghost">
+        Close
+      </label>
+    </div>
+  );
+});
 
 const Model = observer(function Model(props: IProps) {
   const store = useContext(StoresContext);
-  if (props.name === "Login") {
-    const [RegisterFunction, { data, loading, error }] = useMutation(Register);
-  }
-  if (props.name === "Register") {
-    const [LoginFunction, { data, loading, error }] = useMutation(Login);
-  }
+  const [inputs, setInputs] = useState({
+    username: "",
+    password: "",
+    email: "",
+  });
+  //if (props.name === "Login") {
+  //const [RegisterFunction, { data, loading, error }] = useMutation(Register);
+  //}
+  //if (props.name === "Register") {
+  //const [LoginFunction, { data, loading, error }] = useMutation(Login);
+  //}
+  useEffect(() => {
+    console.log("inputs", inputs);
+  }, [inputs]);
 
   return (
     <div>
@@ -57,6 +102,7 @@ const Model = observer(function Model(props: IProps) {
       />
       <div className="modal">
         <div className="modal-box">
+          <h1>{props.name}</h1>
           {props.name === "Register" && (
             <div className="form-control">
               <label className="label">
@@ -66,6 +112,9 @@ const Model = observer(function Model(props: IProps) {
                 type="text"
                 placeholder="Email"
                 className="input input-bordered"
+                onChange={(e) => {
+                  setInputs({ ...inputs, email: e.target.value });
+                }}
               />
             </div>
           )}
@@ -76,8 +125,11 @@ const Model = observer(function Model(props: IProps) {
               </label>
               <input
                 type="text"
-                placeholder="username"
+                placeholder="Username"
                 className="input input-bordered"
+                onChange={(e) => {
+                  setInputs({ ...inputs, username: e.target.value });
+                }}
               />
             </div>
           )}
@@ -88,24 +140,35 @@ const Model = observer(function Model(props: IProps) {
               </label>
               <input
                 type="text"
-                placeholder="password"
+                placeholder="Password"
                 className="input input-bordered"
+                onChange={(e) => {
+                  setInputs({ ...inputs, password: e.target.value });
+                }}
               />
             </div>
           )}
-          <div className="modal-action" onClick={()=>{ if (props.name === "Login"){LoginFunction({variables:{email: store.authStore.emailInput, password: store.authStore.passwordInput}})}
-            if (props.name === "Register"){RegisterFunction({variables:{email: store.authStore.emailInput,name:store.authStore.usernameInput, password: store.authStore.passwordInput}})}}}>
-            <label htmlFor={`${props.name}-modal`} className="btn btn-ghost">
-              Accept
-            </label>
-            <label htmlFor={`${props.name}-modal`} className="btn btn-ghost">
-              Close
-            </label>
-          </div>
+          {props.name === "Register" ? (
+            <RegisterHandler
+              name="Register"
+              username={inputs.username}
+              password={inputs.password}
+              email={inputs.email}
+            />
+          ) : (
+            <div className="modal-action">
+              <label htmlFor={`${props.name}-modal`} className="btn btn-ghost">
+                Accept
+              </label>
+              <label htmlFor={`${props.name}-modal`} className="btn btn-ghost">
+                Close
+              </label>
+            </div>
+          )}
         </div>
       </div>
     </div>
   );
-};
+});
 
 export default Model;
