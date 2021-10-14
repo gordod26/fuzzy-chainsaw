@@ -1,6 +1,5 @@
 import React from "react";
 import Avatar from "boring-avatars";
-import ButtonsLoginRegister from "./ButtonsLoginRegister";
 import Dropdown from "./Dropdown";
 import StoresContext from "../util/context";
 import { observer } from "mobx-react";
