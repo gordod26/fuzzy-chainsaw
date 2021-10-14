@@ -11,7 +11,7 @@ export interface IProps {
   email?: string;
 }
 
-const Register = gql`
+const REGISTER = gql`
   mutation Mutation($email: String!, $password: String!, $name: String!) {
     signup(email: $email, password: $password, name: $name) {
       token
@@ -24,9 +24,10 @@ const Register = gql`
   }
 `;
 
-const Login = gql`
+const LOGIN = gql`
   mutation Mutation($email: String!, $password: String!) {
     login(email: $email, password: $password) {
+      token
       user {
         id
         name
@@ -37,7 +38,7 @@ const Login = gql`
 `;
 const RegisterHandler = observer(function RegisterHandler(props: IProps) {
   const store = useContext(StoresContext);
-  const [registerFunction, { data, loading, error }] = useMutation(Register);
+  const [registerFunction, { data, loading, error }] = useMutation(REGISTER);
   const registerHelper = () => {
     registerFunction({
       variables: {
@@ -70,6 +71,40 @@ const RegisterHandler = observer(function RegisterHandler(props: IProps) {
   );
 });
 
+const LoginHandler = observer(function LoginHandler(props: IProps) {
+  const store = useContext(StoresContext);
+  const [loginFunction, { data, loading, error }] = useMutation(LOGIN);
+  const loginHelper = () => {
+    loginFunction({
+      variables: {
+        email: props.email,
+        password: props.password,
+      },
+    });
+  };
+  useEffect(() => {
+    if (data) {
+      console.log(data);
+    }
+  });
+
+  return (
+    <div
+      className="modal-action"
+      onClick={async () => {
+        loginHelper();
+        console.log(data);
+      }}
+    >
+      <label htmlFor={`${props.name}-modal`} className="btn btn-ghost">
+        Accept
+      </label>
+      <label htmlFor={`${props.name}-modal`} className="btn btn-ghost">
+        Close
+      </label>
+    </div>
+  );
+});
 const Model = observer(function Model(props: IProps) {
   const store = useContext(StoresContext);
   const [inputs, setInputs] = useState({
@@ -103,7 +138,7 @@ const Model = observer(function Model(props: IProps) {
       <div className="modal">
         <div className="modal-box">
           <h1>{props.name}</h1>
-          {props.name === "Register" && (
+          {props.name && (
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Email</span>
@@ -118,7 +153,7 @@ const Model = observer(function Model(props: IProps) {
               />
             </div>
           )}
-          {props.name && (
+          {props.name === "Register" && (
             <div className="form-control">
               <label className="label">
                 <span className="label-text">Username</span>{" "}
@@ -148,22 +183,20 @@ const Model = observer(function Model(props: IProps) {
               />
             </div>
           )}
-          {props.name === "Register" ? (
+          {props.name === "Register" && (
             <RegisterHandler
               name="Register"
               username={inputs.username}
               password={inputs.password}
               email={inputs.email}
             />
-          ) : (
-            <div className="modal-action">
-              <label htmlFor={`${props.name}-modal`} className="btn btn-ghost">
-                Accept
-              </label>
-              <label htmlFor={`${props.name}-modal`} className="btn btn-ghost">
-                Close
-              </label>
-            </div>
+          )}
+          {props.name === "Login" && (
+            <LoginHandler
+              name="Login"
+              email={inputs.email}
+              password={inputs.password}
+            />
           )}
         </div>
       </div>
