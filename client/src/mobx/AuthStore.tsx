@@ -9,8 +9,24 @@ export default class AuthStore {
     makeAutoObservable(this);
   }
 
-  isAuthenticated = false;
+  isAuthenticated = true;
   emailInput = "";
   passwordInput = "";
   usernameInput = "";
+
+  setIsAuthenticated() {
+    const authToken = localStorage.getItem("auth-token");
+    if (authToken) {
+      this.isAuthenticated = true;
+    } else {
+      this.isAuthenticated = false;
+    }
+    console.log(this.isAuthenticated);
+  }
+  login() {
+    this.isAuthenticated = true;
+  }
+  logout() {
+    this.isAuthenticated = false;
+  }
 }

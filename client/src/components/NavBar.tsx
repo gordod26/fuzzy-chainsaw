@@ -11,7 +11,7 @@ const NavBar = observer(function NavBar() {
   const store = useContext(StoresContext);
   return (
     <div className="navbar ">
-      <div className="flex-none hidden lg:flex">
+      <div className="flex-none sm:flex">
         {/* hamburger menu*/}
         <button className="btn btn-square btn-ghost">
           <svg
@@ -30,8 +30,10 @@ const NavBar = observer(function NavBar() {
         </button>
       </div>
       {/*website title*/}
-      <div className="flex-1 hidden px-2 mx-2 lg:flex">
-        <span className="text-lg font-bold">Bible Talk Live</span>
+      <div className="flex-1 px-2 mx-2 lg:flex">
+        <span className="text-lg font-bold">
+          <span className="whitespace-nowrap">Bible Talk</span> Live
+        </span>
       </div>
       <div className="flex-1 lg:flex-none"></div>
       <div className="flex-none">
