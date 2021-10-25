@@ -5,7 +5,7 @@ import StoresContext from "../util/context";
 import { observer } from "mobx-react";
 import { useContext } from "react";
 import Model from "./Model";
-import { gql, useMutation } from "@apollo/client";
+import { AUTH_NAME } from "../constants/constants";
 
 const NavBar = observer(function NavBar() {
   const store = useContext(StoresContext);
@@ -37,6 +37,12 @@ const NavBar = observer(function NavBar() {
       </div>
       <div className="flex-1 lg:flex-none"></div>
       <div className="flex-none">
+        {store.authStore.isAuthenticated && (
+          //name from localstorage if authenticated
+          <h3 className="font-bold pb-1 text-blue-600 lowercase ">
+            {localStorage.getItem(AUTH_NAME)}
+          </h3>
+        )}
         <Model name={"Login"} />
         {!store.authStore.isAuthenticated && <Model name="Register" />}
       </div>

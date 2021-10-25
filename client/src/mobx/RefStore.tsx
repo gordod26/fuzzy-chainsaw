@@ -40,9 +40,17 @@ export default class RefStore {
     this.refFormatHandler();
   }
 
-  postInputHandler(e: ChangeEvent<HTMLTextAreaElement>) {
-    this.postInput = e.target.value;
-    console.log("Refstore", "postInputHandler", toJS(this.postInput));
+  clearPostInput() {
+    this.postInput = "";
+  }
+
+  postInputHandler(e?: ChangeEvent<HTMLTextAreaElement> | string) {
+    if (typeof e !== "string" && e !== undefined) {
+      this.postInput = e.target.value;
+      console.log("Refstore", "postInputHandler", toJS(this.postInput));
+    } else {
+      this.postInput = "";
+    }
   }
 
   refFormatHandler() {

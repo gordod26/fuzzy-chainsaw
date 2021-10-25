@@ -3,7 +3,12 @@ import StoresContext from "../util/context";
 import { observer } from "mobx-react";
 import { useContext, useEffect, useState } from "react";
 import { gql, useMutation } from "@apollo/client";
-import { AUTH_TOKEN } from "../constants/constants";
+import {
+  AUTH_TOKEN,
+  AUTH_ID,
+  AUTH_NAME,
+  AUTH_EMAIL,
+} from "../constants/constants";
 
 export interface IProps {
   name: "Register" | "Login";
@@ -40,6 +45,7 @@ const LOGIN = gql`
 
 const AuthModelBody = observer(function AuthModelBody(props: IProps) {
   const store = useContext(StoresContext);
+
   const [registerFunction] = useMutation(REGISTER, {
     variables: {
       email: props.email,
@@ -47,7 +53,11 @@ const AuthModelBody = observer(function AuthModelBody(props: IProps) {
       password: props.password,
     },
     onCompleted: (registerFunction) => {
+      //store user info to localhost
       localStorage.setItem(AUTH_TOKEN, registerFunction.signup.token);
+      localStorage.setItem(AUTH_ID, registerFunction.signup.user.id);
+      localStorage.setItem(AUTH_NAME, registerFunction.signup.user.name);
+      localStorage.setItem(AUTH_EMAIL, registerFunction.signup.user.email);
       store.authStore.setIsAuthenticated();
       console.log(registerFunction);
     },
@@ -58,7 +68,11 @@ const AuthModelBody = observer(function AuthModelBody(props: IProps) {
       password: props.password,
     },
     onCompleted: (loginFunction) => {
+      //store user info to localhost
       localStorage.setItem(AUTH_TOKEN, loginFunction.login.token);
+      localStorage.setItem(AUTH_ID, loginFunction.login.id);
+      localStorage.setItem(AUTH_NAME, loginFunction.login.user.name);
+      localStorage.setItem(AUTH_EMAIL, loginFunction.login.user.email);
       store.authStore.setIsAuthenticated();
       console.log(loginFunction);
     },

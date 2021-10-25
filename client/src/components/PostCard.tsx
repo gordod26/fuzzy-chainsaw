@@ -4,13 +4,45 @@ import TextareaAutosize from "react-textarea-autosize";
 import { useContext } from "react";
 import { observer } from "mobx-react";
 import StoresContext from "../util/context";
+import { AUTH_NAME, AUTH_TOKEN } from "../constants/constants";
+import { gql, useMutation } from "@apollo/client";
+import { QUERY_POSTS } from "./Comments";
 
 interface Itextarea {
   textarea: JSX.Element;
 }
 
+const MUTATION_POST = gql`
+  mutation Mutation($description: String!) {
+    post(description: $description) {
+      id
+      description
+      postedBy {
+        id
+        name
+      }
+    }
+  }
+`;
+
 const PostCard = observer(function PostCard(): JSX.Element {
   const store = useContext(StoresContext);
+  const [postMutation] = useMutation(MUTATION_POST, {
+    context: {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem(AUTH_TOKEN)}`,
+      },
+    },
+    variables: {
+      description: store.refStore.postInput,
+    },
+    refetchQueries: [QUERY_POSTS],
+    onCompleted: (postMutation) => {
+      console.log(postMutation);
+    },
+  });
+
   return (
     <div className="flex justify-left items-start mb-5">
       <div className="self-start mt-0">
@@ -24,13 +56,16 @@ const PostCard = observer(function PostCard(): JSX.Element {
       <div className={"flex flex-col flex-grow pl-3 text-sm"}>
         <div>
           <p className={" font-extralight"}>
-            commentBoi879<span className="ml-3"></span>
+            {/*display name from localstorage*/}
+            {localStorage.getItem(AUTH_NAME)}
+            <span className="ml-3"></span>
           </p>
         </div>
         <p className={"flex "}>
           <TextareaAutosize
             className={"flex-grow resize-none"}
             placeholder={"What are your thoughts?"}
+            value={store.refStore.postInput}
             onChange={(e) => {
               store.refStore.postInputHandler(e);
             }}
@@ -73,7 +108,15 @@ const PostCard = observer(function PostCard(): JSX.Element {
           </button>
           <div className={" inline font-extralight"}>
             <span className={"ml-6"}>reply</span>
-            <span className={"ml-6"}>post</span>
+            <span
+              onClick={() => {
+                postMutation();
+                store.refStore.postInputHandler();
+              }}
+              className={"ml-6"}
+            >
+              post
+            </span>
             <span className={"ml-6"}>save</span>
             <span className={"ml-6"}>hide</span>
             <span className={"ml-6"}>history</span>
