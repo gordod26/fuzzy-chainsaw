@@ -1,5 +1,4 @@
-import React, { useState } from "react";
-import { useContext } from "react";
+import React, { useState, useContext } from "react";
 import { observer } from "mobx-react";
 import StoresContext from "../util/context";
 import { bibleTranslations } from "../constants/bibleTranslations";

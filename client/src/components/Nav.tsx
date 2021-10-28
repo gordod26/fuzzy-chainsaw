@@ -2,8 +2,8 @@ import { useContext } from "react";
 import { observer } from "mobx-react";
 import StoresContext from "../util/context";
 import Bible from "./Bible";
-import Comments from "./Comments";
 import BibleSectionContainer from "./BibleSectionContainer";
+import Comments from "./PostsAndComments/Comments";
 import IconMenuComments from "./IconMenuComments";
 
 const Nav = observer(function Nav() {

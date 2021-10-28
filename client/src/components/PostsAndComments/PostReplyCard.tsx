@@ -3,8 +3,8 @@ import Avatar from "boring-avatars";
 import TextareaAutosize from "react-textarea-autosize";
 import { useContext } from "react";
 import { observer } from "mobx-react";
-import StoresContext from "../util/context";
-import { AUTH_NAME, AUTH_TOKEN } from "../constants/constants";
+import StoresContext from "../../util/context";
+import { AUTH_NAME, AUTH_TOKEN } from "../../constants/constants";
 import { gql, useMutation } from "@apollo/client";
 import { QUERY_POSTS } from "./Comments";
 
@@ -25,7 +25,7 @@ const MUTATION_POST = gql`
   }
 `;
 
-const PostCard = observer(function PostCard(): JSX.Element {
+const PostReplyCard = observer(function PostCard(): JSX.Element {
   const store = useContext(StoresContext);
   const [postMutation] = useMutation(MUTATION_POST, {
     context: {
@@ -35,7 +35,7 @@ const PostCard = observer(function PostCard(): JSX.Element {
       },
     },
     variables: {
-      description: store.refStore.postInput,
+      description: store.refStore.replyInput,
     },
     refetchQueries: [QUERY_POSTS],
     onCompleted: (postMutation) => {
@@ -44,12 +44,16 @@ const PostCard = observer(function PostCard(): JSX.Element {
   });
 
   return (
-    <div className="flex justify-left items-start mb-5">
+    <div className="flex justify-left items-start ml-8 mb-5">
       <div className="self-start mt-0">
         <Avatar
-          size={40}
-          name="Maria Mitchell"
-          variant="marble"
+          size={30}
+          name={
+            store.authStore.isAuthenticated
+              ? "Maria Mitchell"
+              : "Bessie Coleman"
+          }
+          variant="beam"
           colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
         />
       </div>
@@ -57,19 +61,32 @@ const PostCard = observer(function PostCard(): JSX.Element {
         <div>
           <p className={" font-extralight"}>
             {/*display name from localstorage*/}
-            {localStorage.getItem(AUTH_NAME)}
+            {store.authStore.isAuthenticated
+              ? localStorage.getItem(AUTH_NAME)
+              : "Margaret Bourke"}
             <span className="ml-3"></span>
           </p>
         </div>
         <p className={"flex "}>
-          <TextareaAutosize
-            className={"flex-grow resize-none"}
-            placeholder={"What are your thoughts?"}
-            value={store.refStore.postInput}
-            onChange={(e) => {
-              store.refStore.postInputHandler(e);
-            }}
-          />
+          {store.authStore.isAuthenticated ? (
+            <TextareaAutosize
+              className={"flex-grow resize-none"}
+              placeholder={"What are your thoughts?"}
+              value={store.refStore.replyInput}
+              onChange={(e) => {
+                store.refStore.replyInputHandler(e);
+              }}
+            />
+          ) : (
+            <TextareaAutosize
+              className={"flex-grow resize-none"}
+              placeholder={"Login to write a reply"}
+              disabled={true}
+              onChange={(e) => {
+                store.refStore.replyInputHandler(e);
+              }}
+            />
+          )}
         </p>
         <div className={"inline"}>
           {/*up button*/}
@@ -107,19 +124,23 @@ const PostCard = observer(function PostCard(): JSX.Element {
             </svg>
           </button>
           <div className={" inline font-extralight"}>
-            <span className={"ml-6"}>reply</span>
             <span
               onClick={() => {
                 postMutation();
-                store.refStore.postInputHandler();
+                store.refStore.replyInputHandler();
               }}
               className={"ml-6"}
             >
               post
             </span>
-            <span className={"ml-6"}>save</span>
-            <span className={"ml-6"}>hide</span>
-            <span className={"ml-6"}>history</span>
+            <span
+              className={"ml-6"}
+              onClick={() => {
+                store.refStore.toggleReplyBox();
+              }}
+            >
+              cancel
+            </span>
 
             <span className={"ml-6"}>127d</span>
           </div>
@@ -129,4 +150,4 @@ const PostCard = observer(function PostCard(): JSX.Element {
   );
 });
 
-export default PostCard;
+export default PostReplyCard;

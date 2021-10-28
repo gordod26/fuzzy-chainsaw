@@ -12,7 +12,13 @@ export default class RefStore {
   //selected verse
   yellowVerses: any[] = [];
   postInput: string = "";
+  replyInput: string = "";
   formattedSelection = "";
+  replyBox = false;
+
+  toggleReplyBox() {
+    this.replyBox = !this.replyBox;
+  }
 
   logVerse(e: any) {
     console.log("RefStore", "logVerse", e);
@@ -50,6 +56,15 @@ export default class RefStore {
       console.log("Refstore", "postInputHandler", toJS(this.postInput));
     } else {
       this.postInput = "";
+    }
+  }
+
+  replyInputHandler(e?: ChangeEvent<HTMLTextAreaElement> | string) {
+    if (typeof e !== "string" && e !== undefined) {
+      this.replyInput = e.target.value;
+      console.log("Refstore", "postInputHandler", toJS(this.postInput));
+    } else {
+      this.replyInput = "";
     }
   }
 

@@ -31,7 +31,7 @@ const Model = observer(function Model(props: IProps) {
             htmlFor={`logout-modal`}
             className="btn btn-ghost modal-button"
             onClick={() => {
-              localStorage.removeItem("auth-token");
+              localStorage.clear();
               store.authStore.logout();
             }}
           >

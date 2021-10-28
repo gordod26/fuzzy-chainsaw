@@ -1,14 +1,17 @@
-import React from "react";
+import React, { useContext } from "react";
 import Avatar from "boring-avatars";
+import { observer } from "mobx-react";
+import StoresContext from "../../util/context";
 
-const CommentCard = (props: any): JSX.Element => {
+const ReplyCard = observer((props: any): JSX.Element => {
+  const store = useContext(StoresContext);
   return (
-    <div className="flex justify-left items-start mb-5">
+    <div className="flex justify-left items-start ml-8 mb-5">
       <div className="self-start mt-0">
         <Avatar
-          size={40}
-          name="Maria Mitchell"
-          variant="marble"
+          size={30}
+          name="Eunice Kennedy"
+          variant="beam"
           colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
         />
       </div>
@@ -71,6 +74,6 @@ const CommentCard = (props: any): JSX.Element => {
       </div>
     </div>
   );
-};
+});
 
-export default CommentCard;
+export default ReplyCard;
