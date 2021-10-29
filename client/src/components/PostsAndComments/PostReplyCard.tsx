@@ -11,23 +11,26 @@ import { QUERY_POSTS } from "./Comments";
 interface Itextarea {
   textarea: JSX.Element;
 }
+interface Iprops {
+  postId?: string;
+  userId?: number;
+  userName?: string;
+  userAvatar?: string;
+  parentId?: number;
+}
 
-const MUTATION_POST = gql`
-  mutation Mutation($description: String!) {
-    post(description: $description) {
-      id
-      description
-      postedBy {
-        id
-        name
-      }
-    }
+const MUTATION_REPLY = gql`
+mutation PostMutation($description: String!, $parentId: Int) {
+  post(description: $description, parentId: $parentId) {
+    id
+    description
   }
+}
 `;
 
-const PostReplyCard = observer(function PostCard(): JSX.Element {
+const PostReplyCard = observer((props: Iprops): JSX.Element => {
   const store = useContext(StoresContext);
-  const [postMutation] = useMutation(MUTATION_POST, {
+  const [postMutation] = useMutation(MUTATION_REPLY, {
     context: {
       headers: {
         "Content-Type": "application/json",
@@ -36,6 +39,7 @@ const PostReplyCard = observer(function PostCard(): JSX.Element {
     },
     variables: {
       description: store.refStore.replyInput,
+      parentId: Number(props.parentId),//make sure it's a number
     },
     refetchQueries: [QUERY_POSTS],
     onCompleted: (postMutation) => {

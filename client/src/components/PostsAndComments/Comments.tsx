@@ -16,6 +16,7 @@ export const QUERY_POSTS = gql`
   ) {
     feed(filter: $filter, skip: $skip, take: $take, orderBy: $orderBy) {
       posts {
+        id
         description
         postedBy {
           name
@@ -58,7 +59,7 @@ const Comments = observer((props: any) => {
                 post={i.description}
               ></CommentCard>
               <ReplyCard username={i.postedBy.name} post={i.description} />
-              <PostReplyCard />
+              <PostReplyCard parentId={Number(i.id)}/>
             </>
           ))}
         </div>

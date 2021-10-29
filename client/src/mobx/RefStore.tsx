@@ -62,7 +62,7 @@ export default class RefStore {
   replyInputHandler(e?: ChangeEvent<HTMLTextAreaElement> | string) {
     if (typeof e !== "string" && e !== undefined) {
       this.replyInput = e.target.value;
-      console.log("Refstore", "postInputHandler", toJS(this.postInput));
+      console.log("Refstore", "replyInputHandler", toJS(this.replyInput));
     } else {
       this.replyInput = "";
     }

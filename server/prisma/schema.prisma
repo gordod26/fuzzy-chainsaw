@@ -17,17 +17,20 @@ generator client {
 // 3
 model Post {
   id          Int      @id @default(autoincrement())
-  //parentVer   Version @relation(fields: [])
-  //parentCh    Int
-  //verseRef    Int[]
-  //userRef     User[]
   createdAt   DateTime @default(now())
   description String
   postedBy    User?    @relation(fields: [postedById], references: [id])
   postedById  Int?
   votes       Vote[]
+  comments Post[] @relation(name: "comment")
+  parent Post? @relation(name: "comment", fields: [parentId], references: [id])
+  parentId Int?  @default(0)
   //tags        Tags[]
   //pinned      Boolean @default(false)
+  //parentVer   Version @relation(fields: [])
+  //parentCh    Int
+  //verseRef    Int[]
+  //userRef     User[]
 }
 
 model User {
