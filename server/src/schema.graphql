@@ -26,6 +26,7 @@ type Post {
   description: String!
   postedBy: User
   votes: [Vote!]!
+  comments: [Post]
   parentId: Int
 }
 

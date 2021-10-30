@@ -9,10 +9,10 @@ const CommentCard = observer((props: any): JSX.Element => {
   const store = useContext(StoresContext);
   return (
     <>
-      <div className="flex justify-left items-start mb-5">
+      <div className={`flex justify-left items-start pb-5 ${props.indent}`}>
         <div className="self-start mt-0">
           <Avatar
-            size={40}
+            size={props.avatarSize}
             name="Eunice Kennedy"
             variant="beam"
             colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}

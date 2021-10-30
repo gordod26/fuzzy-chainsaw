@@ -15,6 +15,15 @@ export default class RefStore {
   replyInput: string = "";
   formattedSelection = "";
   replyBox = false;
+  hiddenComments: string[] = [];
+
+  handleHiddenComments(id: string) {
+    const index = this.hiddenComments.findIndex((item) => item === id);
+    this.hiddenComments.some((item) => item === id)
+      ? this.hiddenComments.splice(index, 1)
+      : this.hiddenComments.push(id);
+    console.log("RefStore", "handleHiddenComments", toJS(this.hiddenComments));
+  }
 
   toggleReplyBox() {
     this.replyBox = !this.replyBox;
