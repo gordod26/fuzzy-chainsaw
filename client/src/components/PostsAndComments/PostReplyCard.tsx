@@ -19,18 +19,26 @@ interface Iprops {
   parentId?: number;
 }
 
-const MUTATION_REPLY = gql`
-mutation PostMutation($description: String!, $parentId: Int) {
-  post(description: $description, parentId: $parentId) {
-    id
-    description
+const MUTATION_COMMENT = gql`
+  mutation CommentMutation($description: String!, $parentId: Int) {
+    comment(description: $description, parentId: $parentId) {
+      id
+      description
+      postedBy {
+        id
+        name
+      }
+      votes {
+        id
+      }
+      parentId
+    }
   }
-}
 `;
 
 const PostReplyCard = observer((props: Iprops): JSX.Element => {
   const store = useContext(StoresContext);
-  const [postMutation] = useMutation(MUTATION_REPLY, {
+  const [commentMutation] = useMutation(MUTATION_COMMENT, {
     context: {
       headers: {
         "Content-Type": "application/json",
@@ -39,11 +47,11 @@ const PostReplyCard = observer((props: Iprops): JSX.Element => {
     },
     variables: {
       description: store.refStore.replyInput,
-      parentId: Number(props.parentId),//make sure it's a number
+      parentId: Number(props.parentId), //make sure it's a number
     },
     refetchQueries: [QUERY_POSTS],
-    onCompleted: (postMutation) => {
-      console.log(postMutation);
+    onCompleted: (commentMutation) => {
+      console.log(commentMutation);
     },
   });
 
@@ -130,7 +138,7 @@ const PostReplyCard = observer((props: Iprops): JSX.Element => {
           <div className={" inline font-extralight"}>
             <span
               onClick={() => {
-                postMutation();
+                commentMutation();
                 store.refStore.replyInputHandler();
               }}
               className={"ml-6"}

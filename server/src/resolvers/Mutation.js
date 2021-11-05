@@ -48,11 +48,24 @@ async function post(parent, args, context, info) {
     data: {
       description: args.description,
       postedBy: { connect: { id: userId } },
-      parent: { connect: { id: args.parentId } },
     },
   });
   context.pubsub.publish("NEW_POST", newPost);
   return newPost;
+}
+
+async function comment(parent, args, context, info) {
+  const { userId, prisma } = context;
+
+  if (userId === null) throw new Error("Not Authenticated");
+  const newComment = await prisma.post.create({
+    data: {
+      description: args.description,
+      postedBy: { connect: { id: userId } },
+      parent: { connect: { id: args.parentId } },
+    },
+  });
+  return newComment;
 }
 
 async function vote(parent, args, context, info) {
@@ -152,5 +165,6 @@ module.exports = {
   vote,
   updatePost,
   modDeletePost,
+  comment,
   //userDeletePost,
 };

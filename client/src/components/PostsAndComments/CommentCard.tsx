@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Avatar from "boring-avatars";
 import { useContext } from "react";
 import { observer } from "mobx-react";
@@ -7,6 +7,9 @@ import PostReplyCard from "./PostReplyCard";
 
 const CommentCard = observer((props: any): JSX.Element => {
   const store = useContext(StoresContext);
+  useEffect(() => {
+    console.log("parentId", props.parentId);
+  }, []);
   return (
     <>
       <div className={`flex justify-left items-start pb-5 ${props.indent}`}>
@@ -66,14 +69,16 @@ const CommentCard = observer((props: any): JSX.Element => {
               </svg>
             </button>
             <div className={" inline font-extralight"}>
-              <span
-                className={"ml-6"}
-                onClick={() => {
-                  store.refStore.toggleReplyBox();
-                }}
-              >
-                reply
-              </span>
+              {!props.disableReply && (
+                <span
+                  className={"ml-6"}
+                  onClick={() => {
+                    store.refStore.toggleReplyBox();
+                  }}
+                >
+                  reply
+                </span>
+              )}
               <span className={"ml-6"}>follow</span>
               <span className={"ml-6"}>save</span>
               <span className={"ml-6"}>hide</span>
@@ -83,7 +88,7 @@ const CommentCard = observer((props: any): JSX.Element => {
           </div>
         </div>
       </div>
-      {store.refStore.replyBox && <PostReplyCard />}
+      {store.refStore.replyBox && <PostReplyCard parentId={props.parentId} />}
     </>
   );
 });

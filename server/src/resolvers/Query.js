@@ -16,7 +16,7 @@ async function feed(parent, args, context, info) {
     //root,
     where: {
       parentId: {
-        equals: 0,
+        equals: null,
       },
     },
     skip: args.skip,

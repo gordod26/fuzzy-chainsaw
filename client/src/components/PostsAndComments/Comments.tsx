@@ -27,6 +27,7 @@ export const QUERY_POSTS = gql`
         comments {
           id
           description
+          parentId
           postedBy {
             id
             name
@@ -37,6 +38,7 @@ export const QUERY_POSTS = gql`
           comments {
             id
             description
+            parentId
             postedBy {
               id
               name
@@ -44,6 +46,7 @@ export const QUERY_POSTS = gql`
             comments {
               id
               description
+              parentId
               postedBy {
                 id
                 name
@@ -95,6 +98,7 @@ const Comments = observer((props: any) => {
                 votes={i.votes.length}
                 avatarSize={40}
                 children={i.comments.length > 0 ? true : false}
+                parentId={i.id}
               ></CommentCard>
               {i.comments.length > 0 &&
                 i.comments.map((i: any, index: number) => (
@@ -105,6 +109,7 @@ const Comments = observer((props: any) => {
                       username={i.postedBy.name}
                       post={i.description}
                       votes={i.votes.length}
+                      parentId={i.id}
                     ></CommentCard>
                     {i.comments.length > 0 &&
                       i.comments.map((i: any, index: number) => (
@@ -114,6 +119,7 @@ const Comments = observer((props: any) => {
                             avatarSize={30}
                             username={i.postedBy.name}
                             post={i.description}
+                            parentId={i.id}
                           ></CommentCard>
                           {i.comments.length > 0 &&
                             i.comments.map((i: any, index: number) => (
@@ -124,6 +130,8 @@ const Comments = observer((props: any) => {
                                   avatarSize={30}
                                   username={i.postedBy.name}
                                   post={i.description}
+                                  parentId={i.id}
+                                  disableReply={true}
                                 ></CommentCard>
                               </div>
                             ))}
