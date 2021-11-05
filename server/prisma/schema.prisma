@@ -22,9 +22,9 @@ model Post {
   postedBy    User?    @relation(fields: [postedById], references: [id])
   postedById  Int?
   votes       Vote[]
-  comments Post[] @relation(name: "comment")
-  parent Post? @relation(name: "comment", fields: [parentId], references: [id])
-  parentId Int?  @default(0)
+  parentId    Int?  
+  parent      Post? @relation(name: "ParentComments", fields: [parentId], references: [id])
+  comments    Post[] @relation(name: "ParentComments") 
   //tags        Tags[]
   //pinned      Boolean @default(false)
   //parentVer   Version @relation(fields: [])

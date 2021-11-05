@@ -48,7 +48,7 @@ async function post(parent, args, context, info) {
     data: {
       description: args.description,
       postedBy: { connect: { id: userId } },
-      parentId: args.parentId,
+      parent: { connect: { id: args.parentId } },
     },
   });
   context.pubsub.publish("NEW_POST", newPost);
