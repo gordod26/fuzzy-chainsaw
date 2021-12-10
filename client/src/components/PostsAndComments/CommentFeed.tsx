@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import CommentCard from "./CommentCard";
+import CommentCard from "./SingleComment";
 import PostCard from "./PostCard";
 import { gql, useQuery } from "@apollo/client";
 import { useEffect } from "react";
@@ -8,6 +8,7 @@ import StoresContext from "../../util/context";
 import ReplyCard from "./ReplyCard";
 import PostReplyCard from "./PostReplyCard";
 import { Player, Controls } from "@lottiefiles/react-lottie-player";
+import { AUTH_TOKEN, COMMENTS_PER_PAGE } from "../../constants/constants";
 
 export const QUERY_POSTS = gql`
   query Query($orderBy: PostOrderByInput, $skip: Int, $take: Int) {
@@ -16,7 +17,7 @@ export const QUERY_POSTS = gql`
         id
         parentId
         description
-
+        createdAt
         votes {
           id
         }
@@ -28,6 +29,7 @@ export const QUERY_POSTS = gql`
           id
           description
           parentId
+          createdAt
           postedBy {
             id
             name
@@ -38,15 +40,20 @@ export const QUERY_POSTS = gql`
           comments {
             id
             description
+            createdAt
             parentId
             postedBy {
               id
               name
             }
+            votes {
+              id
+            }
             comments {
               id
               description
               parentId
+              createdAt
               postedBy {
                 id
                 name
@@ -65,12 +72,16 @@ export const QUERY_POSTS = gql`
 
 const Comments = observer((props: any) => {
   const store = useContext(StoresContext);
+  const take = COMMENTS_PER_PAGE;
+  const orderBy = { createdAt: "desc" };
+
+  // GET Comment Feed
   const { loading, error, data } = useQuery(QUERY_POSTS, {
     fetchPolicy: "no-cache",
     variables: {
       skip: 0,
-      take: 20,
-      orderBy: { createdAt: "desc" },
+      take: take,
+      orderBy: orderBy,
     },
   });
 
@@ -79,6 +90,7 @@ const Comments = observer((props: any) => {
       console.log(data);
     }
   }, [data]);
+
   return (
     <div className={" w-4/5 m-auto mt-5"}>
       <PostCard></PostCard>
@@ -94,11 +106,12 @@ const Comments = observer((props: any) => {
             >
               <CommentCard
                 username={i.postedBy.name}
+                time={i.createdAt}
                 post={i.description}
                 votes={i.votes.length}
                 avatarSize={40}
                 children={i.comments.length > 0 ? true : false}
-                parentId={i.id}
+                id={i.id}
               ></CommentCard>
               {i.comments.length > 0 &&
                 i.comments.map((i: any, index: number) => (
@@ -106,10 +119,11 @@ const Comments = observer((props: any) => {
                     <CommentCard
                       indent={"ml-10"}
                       avatarSize={30}
+                      time={i.createdAt}
                       username={i.postedBy.name}
                       post={i.description}
                       votes={i.votes.length}
-                      parentId={i.id}
+                      id={i.id}
                     ></CommentCard>
                     {i.comments.length > 0 &&
                       i.comments.map((i: any, index: number) => (
@@ -117,9 +131,11 @@ const Comments = observer((props: any) => {
                           <CommentCard
                             indent={"ml-20"}
                             avatarSize={30}
+                            time={i.createdAt}
                             username={i.postedBy.name}
                             post={i.description}
-                            parentId={i.id}
+                            votes={i.votes.length}
+                            id={i.id}
                           ></CommentCard>
                           {i.comments.length > 0 &&
                             i.comments.map((i: any, index: number) => (
@@ -129,8 +145,10 @@ const Comments = observer((props: any) => {
                                   indent={"ml-28"}
                                   avatarSize={30}
                                   username={i.postedBy.name}
+                                  time={i.createdAt}
+                                  votes={i.votes.length}
                                   post={i.description}
-                                  parentId={i.id}
+                                  id={i.id}
                                   disableReply={true}
                                 ></CommentCard>
                               </div>

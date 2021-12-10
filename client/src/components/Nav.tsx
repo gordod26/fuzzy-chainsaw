@@ -3,7 +3,7 @@ import { observer } from "mobx-react";
 import StoresContext from "../util/context";
 import Bible from "./Bible";
 import BibleSectionContainer from "./BibleSectionContainer";
-import Comments from "./PostsAndComments/Comments";
+import Comments from "./PostsAndComments/CommentFeed";
 import IconMenuComments from "./IconMenuComments";
 
 const Nav = observer(function Nav() {

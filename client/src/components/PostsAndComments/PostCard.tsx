@@ -6,7 +6,7 @@ import { observer } from "mobx-react";
 import StoresContext from "../../util/context";
 import { AUTH_NAME, AUTH_TOKEN } from "../../constants/constants";
 import { gql, useMutation } from "@apollo/client";
-import { QUERY_POSTS } from "./Comments";
+import { QUERY_POSTS } from "./CommentFeed";
 
 interface Itextarea {
   textarea: JSX.Element;
@@ -90,7 +90,7 @@ const PostCard = observer(function PostCard(): JSX.Element {
         </p>
         <div className={"inline"}>
           {/*up button*/}
-          <button>
+          {/*<button>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="inline w-4 h-4"
@@ -105,9 +105,9 @@ const PostCard = observer(function PostCard(): JSX.Element {
                 d="M5 15l7-7 7 7"
               />
             </svg>
-          </button>
+            </button>*/}
           {/*down button*/}
-          <button>
+          {/*<button>
             <svg
               xmlns="http://www.w3.org/2000/svg"
               className="inline w-4 h-4"
@@ -122,23 +122,21 @@ const PostCard = observer(function PostCard(): JSX.Element {
                 d="M19 9l-7 7-7-7"
               />
             </svg>
-          </button>
+            </button>*/}
           <div className={" inline font-extralight"}>
-            <span className={"ml-6"}>reply</span>
+            {/*<span className={"ml-6"}>reply</span>*/}
             <span
               onClick={() => {
                 postMutation();
                 store.refStore.postInputHandler();
               }}
-              className={"ml-6"}
+              className={"cursor-pointer"}
             >
               post
             </span>
-            <span className={"ml-6"}>save</span>
-            <span className={"ml-6"}>hide</span>
-            <span className={"ml-6"}>history</span>
-
-            <span className={"ml-6"}>127d</span>
+            {/*<span className={"ml-6"}>save</span>*/}
+            {/*<span className={"ml-6"}>hide</span>*/}
+            {/*<span className={"ml-6"}>history</span>*/}
           </div>
         </div>
       </div>

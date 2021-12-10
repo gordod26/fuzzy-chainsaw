@@ -29,6 +29,7 @@ type Post {
   votes: [Vote!]!
   comments: [Post]
   parentId: Int
+  createdAt: String!
 }
 
 type Comment {
@@ -38,6 +39,7 @@ type Comment {
   votes: [Vote!]!
   comments: [Post]
   parentId: Int
+  createdAt: String!
 }
 
 type AuthPayload {

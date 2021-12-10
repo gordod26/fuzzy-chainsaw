@@ -6,7 +6,7 @@ import { observer } from "mobx-react";
 import StoresContext from "../../util/context";
 import { AUTH_NAME, AUTH_TOKEN } from "../../constants/constants";
 import { gql, useMutation } from "@apollo/client";
-import { QUERY_POSTS } from "./Comments";
+import { QUERY_POSTS } from "./CommentFeed";
 
 interface Itextarea {
   textarea: JSX.Element;
@@ -17,6 +17,7 @@ interface Iprops {
   userName?: string;
   userAvatar?: string;
   parentId?: number;
+  isOpen: any;
 }
 
 const MUTATION_COMMENT = gql`
@@ -140,6 +141,7 @@ const PostReplyCard = observer((props: Iprops): JSX.Element => {
               onClick={() => {
                 commentMutation();
                 store.refStore.replyInputHandler();
+                props.isOpen(false);
               }}
               className={"ml-6"}
             >
@@ -148,7 +150,7 @@ const PostReplyCard = observer((props: Iprops): JSX.Element => {
             <span
               className={"ml-6"}
               onClick={() => {
-                store.refStore.toggleReplyBox();
+                props.isOpen(false);
               }}
             >
               cancel

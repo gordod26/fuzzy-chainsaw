@@ -25,12 +25,13 @@ async function feed(parent, args, context, info) {
     //include: { comments: true }, //get nested comments 1 deep
     //include: { comments: { include: { comments: true } } }, //get nested 2 deep
     include: {
+      //get comments nested 3 deep
       comments: {
         include: {
           comments: { include: { comments: { include: { comments: true } } } },
         },
       },
-    }, //get nested 3 deep
+    },
   });
 
   console.log(posts);
