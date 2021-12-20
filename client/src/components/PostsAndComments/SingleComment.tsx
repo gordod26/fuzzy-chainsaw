@@ -8,6 +8,7 @@ import PostReplyCard from "./PostReplyCard";
 import { AUTH_TOKEN, AUTH_ID } from "../../constants/constants";
 import { QUERY_POSTS } from "./CommentFeed";
 import { timeDifferenceForDate } from "../../helpers/time";
+import DeleteCommentModal from "../Modals/DeleteComment";
 
 const VOTE_MUTATION = gql`
   mutation Mutation($postId: ID!) {
@@ -28,11 +29,34 @@ const VOTE_MUTATION = gql`
   }
 `;
 
+const DELETE_POST_MUTATION = gql`
+  mutation Mutatin($deletePostId: ID!) {
+    deletePost(id: $deletePostId) {
+      id
+    }
+  }
+`;
+
 const CommentCard = observer((props: any): JSX.Element => {
   const [replyBoxOpen, setReplyBoxOpen] = useState(false);
+  //#4
+  const [deleteModelIsOpen, setDeleteModelIsOpen] = useState(false);
   const store = useContext(StoresContext);
   const authToken = localStorage.getItem(AUTH_TOKEN);
   const userId = localStorage.getItem(AUTH_ID);
+
+  const [deletePost] = useMutation(DELETE_POST_MUTATION, {
+    context: {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem(AUTH_TOKEN)}`,
+      },
+    },
+    variables: {
+      deletePostId: props.id,
+    },
+    refetchQueries: [QUERY_POSTS],
+  });
 
   const [vote] = useMutation(VOTE_MUTATION, {
     context: {
@@ -71,7 +95,11 @@ const CommentCard = observer((props: any): JSX.Element => {
             </p>
           </div>
           <div>
-            <p>{props.post}</p>
+            {props.deleted ? (
+              <p className="italic text-gray-400">deleted</p>
+            ) : (
+              <p>{props.post} </p>
+            )}
           </div>
           <div className={"inline-block truncate"}>
             {/*upvote button*/}
@@ -131,7 +159,64 @@ const CommentCard = observer((props: any): JSX.Element => {
                   reply
                 </span>
               )}
-              <span className={"ml-6 cursor-pointer"}>follow</span>
+              {userId === props.userId ? (
+                <>
+                  <div
+                    className="inline ml-6"
+                    onClick={() => {
+                      setDeleteModelIsOpen(true);
+                      console.debug("deleteModelIsOpen ->", deleteModelIsOpen);
+                    }}
+                  >
+                    delete
+                  </div>
+                  <div className={`${deleteModelIsOpen && "modal-open"} modal`}>
+                    <div className="modal-box">
+                      <p>are you sure you want to delete this post?</p>
+                      <div className="modal-action">
+                        <div
+                          className="btn btn-primary"
+                          onClick={() => {
+                            //check id being passed to delete mutation
+                            /*console.debug(
+                              "props.id passed to delete mutation",
+                              props.id
+                              )*/
+
+                            //call delete mutation
+                            deletePost();
+                            //close modal
+                            setDeleteModelIsOpen(false);
+                          }}
+                        >
+                          Accept
+                        </div>
+                        <div
+                          className="btn"
+                          onClick={() => {
+                            //close modal
+                            setDeleteModelIsOpen(false);
+                          }}
+                        >
+                          Close
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </>
+              ) : (
+                //          if (authToken && userId === props.userId) {
+                //           setDeleteModelIsOpen(!deleteModelIsOpen);
+
+                //deletePost();
+                //        }
+                //     }}
+                //    className={"ml-6 cursor-pointer"}
+                // >
+                //  delete
+                // </a>
+                <span className={"ml-6 cursor-pointer"}>follow</span>
+              )}
               <span className={"ml-6 cursor-pointer"}>save</span>
               <span className={"ml-6 cursor-pointer"}>hide</span>
               <span className={"ml-6 cursor-pointer"}>history</span>

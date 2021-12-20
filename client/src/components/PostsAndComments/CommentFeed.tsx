@@ -18,6 +18,7 @@ export const QUERY_POSTS = gql`
         parentId
         description
         createdAt
+        deleted
         votes {
           id
         }
@@ -30,6 +31,7 @@ export const QUERY_POSTS = gql`
           description
           parentId
           createdAt
+          deleted
           postedBy {
             id
             name
@@ -41,6 +43,7 @@ export const QUERY_POSTS = gql`
             id
             description
             createdAt
+            deleted
             parentId
             postedBy {
               id
@@ -54,6 +57,7 @@ export const QUERY_POSTS = gql`
               description
               parentId
               createdAt
+              deleted
               postedBy {
                 id
                 name
@@ -106,6 +110,8 @@ const Comments = observer((props: any) => {
             >
               <CommentCard
                 username={i.postedBy.name}
+                deleted={i.deleted}
+                userId={i.postedBy.id}
                 time={i.createdAt}
                 post={i.description}
                 votes={i.votes.length}
@@ -119,6 +125,8 @@ const Comments = observer((props: any) => {
                     <CommentCard
                       indent={"ml-10"}
                       avatarSize={30}
+                      userId={i.postedBy.id}
+                      deleted={i.deleted}
                       time={i.createdAt}
                       username={i.postedBy.name}
                       post={i.description}
@@ -131,7 +139,9 @@ const Comments = observer((props: any) => {
                           <CommentCard
                             indent={"ml-20"}
                             avatarSize={30}
+                            userId={i.postedBy.id}
                             time={i.createdAt}
+                            deleted={i.deleted}
                             username={i.postedBy.name}
                             post={i.description}
                             votes={i.votes.length}
@@ -144,7 +154,9 @@ const Comments = observer((props: any) => {
                                 <CommentCard
                                   indent={"ml-28"}
                                   avatarSize={30}
+                                  userId={i.postedBy.id}
                                   username={i.postedBy.name}
+                                  deleted={i.deleted}
                                   time={i.createdAt}
                                   votes={i.votes.length}
                                   post={i.description}

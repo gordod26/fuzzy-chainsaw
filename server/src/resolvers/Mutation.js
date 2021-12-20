@@ -101,7 +101,7 @@ async function vote(parent, args, context, info) {
 async function updatePost(parent, args, context, info) {
   const { userId } = context;
 
-  const id = +args.id;
+  const id = Number(args.id);
 
   if (userId === null) throw new Error("Not Authenticated");
 
@@ -116,15 +116,19 @@ async function updatePost(parent, args, context, info) {
   return updatedPost;
 }
 
-async function modDeletePost(parent, args, context, info) {
-  const { userId } = context;
+async function deletePost(parent, args, context, info) {
+  const { userId, prisma } = context;
 
-  const id = +args.id;
+  const id = Number(args.id);
 
+  console.debug("Mutation: deletePost");
   if (userId === null) throw new Error("Not Authenticated");
 
-  const deletePost = await prisma.post.delete({
+  const deletePost = await prisma.post.update({
     where: { id },
+    data: {
+      deleted: true,
+    },
   });
 
   return deletePost;
@@ -132,30 +136,33 @@ async function modDeletePost(parent, args, context, info) {
 
 //async function userDeletePost(parent, args, context, info) {
 //const { userId, prisma } = context;
-////const id = +args.id;
+//const id = Number(args.id);
 
-////const post = await prisma.post.findUnique({
-////where: { id, postedBy: { id: { userId } } },
-////});
 //const post = await prisma.post.findUnique({
-//where: {
-//id_postedById: {
-//id: Number(args.id),
-//},
+//where: { id, postedBy: { id: { userId } } },
+//});
+////const post = await prisma.post.findUnique({
+////where: {
+////id_postedById: {
+////id: Number(args.id),
+////},
+////},
+////});
+
+//if (Boolean(post)) {
+//throw new Error(
+//`You cannot delete a post you did not post: ${args.postId}`
+//);
+//}
+
+//const deletePost = await prisma.post.update({
+//where: { id },
+//data: {
+//deleted: true,
 //},
 //});
 
-////if (Boolean(post)) {
-////throw new Error(
-////`You cannot delete a post you did not post: ${args.postId}`
-////);
-////}
-
-////const deletePost = await prisma.post.delete({
-////where: { id },
-////});
-
-//return post;
+//return { deletePost, post };
 //}
 
 module.exports = {
@@ -164,7 +171,6 @@ module.exports = {
   post,
   vote,
   updatePost,
-  modDeletePost,
+  deletePost,
   comment,
-  //userDeletePost,
 };

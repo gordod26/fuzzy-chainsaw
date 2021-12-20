@@ -17,8 +17,7 @@ type Mutation {
   signup(email: String!, password: String!, name: String!): AuthPayload
   login(email: String!, password: String!): AuthPayload
   updatePost(id: ID!, description: String): Post
-  userDeletePost(id: ID!): Post
-  modDeletePost(id: ID!): Post
+  deletePost(id: ID!): Post
   vote(postId: ID!): Vote
 }
 
@@ -30,6 +29,7 @@ type Post {
   comments: [Post]
   parentId: Int
   createdAt: String!
+  deleted: Boolean!
 }
 
 type Comment {
@@ -40,6 +40,7 @@ type Comment {
   comments: [Post]
   parentId: Int
   createdAt: String!
+  deleted: Boolean!
 }
 
 type AuthPayload {

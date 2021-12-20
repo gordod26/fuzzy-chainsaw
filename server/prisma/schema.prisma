@@ -25,6 +25,7 @@ model Post {
   parentId    Int?  
   parent      Post? @relation(name: "ParentComments", fields: [parentId], references: [id])
   comments    Post[] @relation(name: "ParentComments") 
+  deleted      Boolean @default(false)
   //tags        Tags[]
   //pinned      Boolean @default(false)
   //parentVer   Version @relation(fields: [])
