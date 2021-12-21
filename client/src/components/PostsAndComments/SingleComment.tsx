@@ -56,6 +56,9 @@ const CommentCard = observer((props: any): JSX.Element => {
       deletePostId: props.id,
     },
     refetchQueries: [QUERY_POSTS],
+    onCompleted: (deletePost) => {
+      console.debug("MUTATION -> DELETE_POST_MUTATION");
+    },
   });
 
   const [vote] = useMutation(VOTE_MUTATION, {
@@ -69,6 +72,9 @@ const CommentCard = observer((props: any): JSX.Element => {
       postId: props.id,
     },
     refetchQueries: [QUERY_POSTS],
+    onCompleted: (vote) => {
+      console.debug("MUTATION -> VOTE_MUTATION");
+    },
   });
 
   //console logs ->
@@ -215,11 +221,10 @@ const CommentCard = observer((props: any): JSX.Element => {
                 // >
                 //  delete
                 // </a>
-                <span className={"ml-6 cursor-pointer"}>follow</span>
+                <div className={`ml-6 cursor-pointer inline`}>follow</div>
               )}
-              <span className={"ml-6 cursor-pointer"}>save</span>
-              <span className={"ml-6 cursor-pointer"}>hide</span>
-              <span className={"ml-6 cursor-pointer"}>history</span>
+              <div className={`ml-6 cursor-pointer inline`}>save</div>
+              <div className={`ml-6 cursor-pointer inline`}>history</div>
             </div>
           </div>
         </div>
