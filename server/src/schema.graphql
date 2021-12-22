@@ -53,6 +53,8 @@ type User {
   name: String!
   email: String!
   posts: [Post!]!
+  #votes: [Vote!]!
+  colors: [String!]!
 }
 
 type Subscription {

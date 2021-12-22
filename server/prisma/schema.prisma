@@ -41,6 +41,7 @@ model User {
   password  String
   posts     Post[]
   votes     Vote[]
+  avitar    Avitar?
 }
 
 model Vote {
@@ -51,6 +52,18 @@ model Vote {
   userId Int
   
   @@unique([postId, userId])
+}
+
+model Avitar {
+  id Int @id @default(autoincrement())
+  user User @relation(fields: [userId], references: [id])
+  userId Int @unique
+  name String
+  color0 String @default("#554236")
+  color1 String @default("#f77825")
+  color2 String @default("#d3ce3d")
+  color3 String @default("#f1efa5")
+  color4 String @default("#60b99a")
 }
 
 model Tags {

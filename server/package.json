@@ -25,6 +25,6 @@
     "subscriptions-transport-ws": "^0.9.19"
   },
   "devDependencies": {
-    "prisma": "^3.4.0"
+    "prisma": "^3.7.0"
   }
 }
