@@ -11,11 +11,11 @@ const ColorCircle = observer((props: any) => {
 
   return (
     <div className={"flex flex-row justify-center"}>
-      <Color color={"#594f4f"} />
-      <Color color={"#547980"} />
-      <Color color={"#45ADA8"} />
-      <Color color={"#9de0ad"} />
-      <Color color={"#e5fcc2"} />
+      <Color color={props.color1} />
+      <Color color={props.color2} />
+      <Color color={props.color3} />
+      <Color color={props.color4} />
+      <Color color={props.color5} />
     </div>
   );
 });
