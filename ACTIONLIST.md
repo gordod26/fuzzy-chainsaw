@@ -10,4 +10,5 @@
      11. [X] change href functionality of modal to checkbox copy from daisyUI
      12. [X] the wrong props.id is being passed to the delete mutation when I have two posts, one after the other, and delete the fist one. the second post is mistakenly being deleted
      13. [X] console log props.id onClick of delete button
-14. [ ] add hide functionality(hide functionality should actually be a collapse functionality which is harder so I will return to it later)
+14. [X] add hide functionality(hide functionality should actually be a collapse functionality which is harder so I will return to it later)
+15. [ ] add gql mutation to add user avitar

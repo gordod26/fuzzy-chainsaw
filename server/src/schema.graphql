@@ -19,6 +19,14 @@ type Mutation {
   updatePost(id: ID!, description: String): Post
   deletePost(id: ID!): Post
   vote(postId: ID!): Vote
+  createAvitar(
+    name: String!
+    color0: String!
+    color1: String!
+    color2: String!
+    color3: String!
+    color4: String!
+  ): Avitar
 }
 
 type Post {
@@ -54,7 +62,7 @@ type User {
   email: String!
   posts: [Post!]!
   #votes: [Vote!]!
-  colors: [String!]!
+  avitar: Avitar!
 }
 
 type Subscription {
@@ -66,6 +74,17 @@ type Vote {
   id: ID!
   post: Post!
   user: User!
+}
+
+type Avitar {
+  id: ID!
+  name: String!
+  color0: String!
+  color1: String!
+  color2: String!
+  color3: String!
+  color4: String!
+  user: User
 }
 
 input PostOrderByInput {

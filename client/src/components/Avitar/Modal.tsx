@@ -20,7 +20,7 @@ const AvitarModal = observer((props: any) => {
   ]);
 
   useEffect(() => {
-    console.log(colors[0]);
+    console.log(colors);
   }, []);
 
   return (
