@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs");
-const { createAvitar } = require("./Avitar");
+const { createAvitar, changeAvitar } = require("./Avitar");
 const jwt = require("jsonwebtoken");
 const { APP_SECRET, getUserId } = require("../utils");
 const { PrismaClient } = require("@prisma/client");
@@ -14,9 +14,25 @@ async function signup(parent, args, context, info) {
 
   const token = jwt.sign({ userId: user.id }, APP_SECRET);
 
+  // create default avitar when new user signsup
+  const newAvitar = await prisma.avitar.create({
+    data: {
+      name: user.name,
+      color0: "#69d2e7",
+      color1: "#a7dbd8",
+      color2: "#e0e4cc",
+      color3: "#f38630",
+      color4: "#fa6900",
+      user: { connect: { id: user.id } },
+    },
+  });
+
+  console.log("MUTATION postAvitar success for user " + user.id);
+
   return {
     token,
     user,
+    newAvitar,
   };
 }
 
@@ -175,4 +191,5 @@ module.exports = {
   deletePost,
   comment,
   createAvitar,
+  changeAvitar,
 };

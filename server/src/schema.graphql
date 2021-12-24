@@ -6,11 +6,6 @@ type Query {
   verse(translation: String!, id: Int!): Verse!
 }
 
-type Feed {
-  posts: [Post!]!
-  count: Int!
-}
-
 type Mutation {
   post(description: String!): Post!
   comment(description: String!, parentId: Int): Post!
@@ -27,6 +22,19 @@ type Mutation {
     color3: String!
     color4: String!
   ): Avitar
+  changeAvitar(
+    name: String!
+    color0: String!
+    color1: String!
+    color2: String!
+    color3: String!
+    color4: String!
+  ): Avitar
+}
+
+type Feed {
+  posts: [Post!]!
+  count: Int!
 }
 
 type Post {
