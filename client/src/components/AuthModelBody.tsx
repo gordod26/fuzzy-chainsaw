@@ -8,6 +8,7 @@ import {
   AUTH_ID,
   AUTH_NAME,
   AUTH_EMAIL,
+  AUTH_AVITAR,
 } from "../constants/constants";
 
 export interface IProps {
@@ -25,6 +26,14 @@ const REGISTER = gql`
         id
         name
         email
+        avitar {
+          name
+          color0
+          color1
+          color2
+          color3
+          color4
+        }
       }
     }
   }
@@ -70,7 +79,7 @@ const AuthModelBody = observer(function AuthModelBody(props: IProps) {
     onCompleted: (loginFunction) => {
       //store user info to localhost
       localStorage.setItem(AUTH_TOKEN, loginFunction.login.token);
-      localStorage.setItem(AUTH_ID, loginFunction.login.id);
+      localStorage.setItem(AUTH_ID, loginFunction.login.user.id);
       localStorage.setItem(AUTH_NAME, loginFunction.login.user.name);
       localStorage.setItem(AUTH_EMAIL, loginFunction.login.user.email);
       store.authStore.setIsAuthenticated();
