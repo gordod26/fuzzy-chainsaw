@@ -4,26 +4,15 @@ import TextareaAutosize from "react-textarea-autosize";
 import { useContext } from "react";
 import { observer } from "mobx-react";
 import StoresContext from "../../util/context";
-import { AUTH_NAME, AUTH_TOKEN } from "../../constants/constants";
-import { gql, useMutation } from "@apollo/client";
+import { AUTH_ID, AUTH_NAME, AUTH_TOKEN } from "../../constants/constants";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import { QUERY_POSTS } from "./CommentFeed";
+import { MUTATION_POST } from "../../helpers/mutations";
+import { GET_AVITAR } from "../../helpers/querys";
 
 interface Itextarea {
   textarea: JSX.Element;
 }
-
-const MUTATION_POST = gql`
-  mutation Mutation($description: String!) {
-    post(description: $description) {
-      id
-      description
-      postedBy {
-        id
-        name
-      }
-    }
-  }
-`;
 
 const PostCard = observer(function PostCard(): JSX.Element {
   const store = useContext(StoresContext);
@@ -43,18 +32,34 @@ const PostCard = observer(function PostCard(): JSX.Element {
     },
   });
 
+  const { loading, error, data } = useQuery(GET_AVITAR, {
+    variables: {
+      userId: Number(localStorage.getItem(AUTH_ID)),
+    },
+  });
+
   return (
     <div className="flex justify-left items-start mb-5">
       <div className="self-start mt-0">
         <Avatar
           size={40}
           name={
-            store.authStore.isAuthenticated
-              ? "Maria Mitchell"
+            store.authStore.isAuthenticated && data
+              ? data.getAvitar.name
               : "Bessie Coleman"
           }
-          variant="beam"
-          colors={["#92A1C6", "#146A7C", "#F0AB3D", "#C271B4", "#C20D90"]}
+          variant={store.authStore.isAuthenticated && data ? "beam" : "marble"}
+          colors={
+            store.authStore.isAuthenticated && data
+              ? [
+                  data.getAvitar.color0,
+                  data.getAvitar.color1,
+                  data.getAvitar.color2,
+                  data.getAvitar.color3,
+                  data.getAvitar.color4,
+                ]
+              : ["#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff"]
+          }
         />
       </div>
       <div className={"flex flex-col flex-grow pl-3 text-sm"}>

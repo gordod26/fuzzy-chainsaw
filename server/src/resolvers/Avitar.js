@@ -44,7 +44,19 @@ async function changeAvitar(parent, args, context, info) {
   return newAvitar;
 }
 
+async function getAvitar(parent, args, context, info) {
+  const userId = Number(args.userId);
+
+  const avitar = await prisma.avitar.findUnique({
+    where: { userId },
+  });
+
+  console.log("get avitar success " + userId);
+  return avitar;
+}
+
 module.exports = {
   createAvitar,
   changeAvitar,
+  getAvitar,
 };

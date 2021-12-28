@@ -4,6 +4,7 @@ type Query {
   chapter(translation: String!, b: Int!, c: Int!): Chapter!
   book(b: Int!): KeyEnglish!
   verse(translation: String!, id: Int!): Verse!
+  getAvitar(userId: Int!): Avitar
 }
 
 type Mutation {
