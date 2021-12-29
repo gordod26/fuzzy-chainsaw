@@ -7,6 +7,7 @@ module.exports = {
     },
   },
   variants: {
+    fontWeight: ["responsive", "hover", "focus", "active"],
     extend: {
       backgroundColor: ["active"],
     },

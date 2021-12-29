@@ -1,4 +1,5 @@
 import StoresContext from "../../util/context";
+import mstContext from "../../util/mstContext";
 import colors from "nice-color-palettes";
 import { randomColors } from "../../helpers/colors";
 import ColorCircle from "./ColorSamples/ColorSampleSvg";
@@ -11,6 +12,7 @@ import ColorGroup from "./ColorSamples/ColorSampleGroup";
 // #2 create model to confirm delete
 const AvitarModal = observer((props: any) => {
   const store = useContext(StoresContext);
+  const mstStore = useContext(mstContext);
   const [colors, setColors] = useState([
     "#69d2e7",
     "#a7dbd8",
@@ -18,6 +20,14 @@ const AvitarModal = observer((props: any) => {
     "#f38630",
     "#fa6900",
   ]);
+
+  const handleSave = () => {
+    mstStore.modals.toggleModel();
+  };
+
+  const handleClose = () => {
+    mstStore.modals.toggleModel();
+  };
 
   useEffect(() => {
     console.log(colors);
@@ -98,6 +108,45 @@ const AvitarModal = observer((props: any) => {
             />
             <p className="flex justify-center font-light pt-2">David</p>
           </div>
+        </div>
+        <div className="flex justify-end mt-3">
+          <button
+            className="btn btn-circle btn-sm btn-warning m-3"
+            onClick={handleClose}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              className="absolute w-4 h-4 stroke-current"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+          <button
+            className="btn btn-circle btn-sm btn-success m-3"
+            onClick={handleSave}
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M5 13l4 4L19 7"
+              />
+            </svg>
+          </button>
         </div>
       </div>
     </div>

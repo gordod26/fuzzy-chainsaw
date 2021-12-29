@@ -8,14 +8,20 @@ import Model from "./Model";
 import { GET_AVITAR } from "../helpers/querys";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { AUTH_ID, AUTH_NAME, AUTH_TOKEN } from "../constants/constants";
+import mstContext from "../util/mstContext";
 
 const NavBar = observer(function NavBar() {
   const store = useContext(StoresContext);
+  const mstStore = useContext(mstContext);
   const { loading, error, data } = useQuery(GET_AVITAR, {
     variables: {
       userId: Number(localStorage.getItem(AUTH_ID)),
     },
   });
+
+  const avitarModalHandler = () => {
+    mstStore.modals.toggleModel();
+  };
 
   return (
     <div className="navbar ">
@@ -54,9 +60,9 @@ const NavBar = observer(function NavBar() {
         <Model name={"Login"} />
         {!store.authStore.isAuthenticated && <Model name="Register" />}
       </div>
-      <div className="flex-none">
-        <div className="avatar">
-          <div className={"rounded-full w-10 h-10 m-1"}>
+      <div className="flex-none ">
+        <div className="avatar dropdown dropdown-end">
+          <div tabIndex={0} className={"rounded-full w-10 h-10 m-1 "}>
             <div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -94,6 +100,33 @@ const NavBar = observer(function NavBar() {
               />
             </div>
           </div>
+          {store.authStore.isAuthenticated && (
+            <ul
+              tabIndex={0}
+              className="p-2 shadow menu dropdown-content bg-base-100 rounded-box w-52"
+            >
+              <li
+                className="hover:font-bold cursor-pointer"
+                onClick={avitarModalHandler}
+              >
+                Avitar
+              </li>
+              <li className="hover:font-bold cursor-pointer">User Settings</li>
+              <li className="hover:font-bold cursor-pointer">
+                Create a Community
+              </li>
+              <li className="hover:font-bold cursor-pointer">
+                Create a Organization
+              </li>
+              <li className="hover:font-bold cursor-pointer">Newsletter</li>
+              <li className="hover:font-bold cursor-pointer">
+                Achievements & Statistics
+              </li>
+              <li className="hover:font-bold cursor-pointer"> Donate </li>
+              {/*add logout to menu in mobile?*/}
+              {/*<li className="hover:font-bold cursor-pointer"> Logout </li>*/}
+            </ul>
+          )}
         </div>
       </div>
     </div>
