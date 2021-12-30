@@ -5,15 +5,17 @@ import StoresContext from "../util/context";
 import { observer } from "mobx-react";
 import { useContext } from "react";
 import Model from "./Model";
-import { GET_AVITAR } from "../helpers/querys";
+import { GET_AVATAR } from "../helpers/querys";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { AUTH_ID, AUTH_NAME, AUTH_TOKEN } from "../constants/constants";
 import mstContext from "../util/mstContext";
+import UserAvatar from "./Avitar/UserAvatar";
 
 const NavBar = observer(function NavBar() {
   const store = useContext(StoresContext);
+  const authId = Number(localStorage.getItem(AUTH_ID));
   const mstStore = useContext(mstContext);
-  const { loading, error, data } = useQuery(GET_AVITAR, {
+  const { loading, error, data } = useQuery(GET_AVATAR, {
     variables: {
       userId: Number(localStorage.getItem(AUTH_ID)),
     },
@@ -76,28 +78,7 @@ const NavBar = observer(function NavBar() {
                   clipRule="evenodd"
                 />
               </svg>
-              <Avatar
-                size={40}
-                name={
-                  store.authStore.isAuthenticated && data
-                    ? data.getAvitar.name
-                    : "Bessie Coleman"
-                }
-                variant={
-                  store.authStore.isAuthenticated && data ? "beam" : "marble"
-                }
-                colors={
-                  store.authStore.isAuthenticated && data
-                    ? [
-                        data.getAvitar.color0,
-                        data.getAvitar.color1,
-                        data.getAvitar.color2,
-                        data.getAvitar.color3,
-                        data.getAvitar.color4,
-                      ]
-                    : ["#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff"]
-                }
-              />
+              <UserAvatar userId={authId ? authId : 11} avitarSize={40} />
             </div>
           </div>
           {store.authStore.isAuthenticated && (
@@ -109,7 +90,7 @@ const NavBar = observer(function NavBar() {
                 className="hover:font-bold cursor-pointer"
                 onClick={avitarModalHandler}
               >
-                Avitar
+                Avatar
               </li>
               <li className="hover:font-bold cursor-pointer">User Settings</li>
               <li className="hover:font-bold cursor-pointer">

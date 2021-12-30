@@ -4,7 +4,8 @@ type Query {
   chapter(translation: String!, b: Int!, c: Int!): Chapter!
   book(b: Int!): KeyEnglish!
   verse(translation: String!, id: Int!): Verse!
-  getAvitar(userId: Int!): Avitar
+  getAvatar(userId: Int!): Avatar
+  getStyle(id: Int!): AvatarStyle
 }
 
 type Mutation {
@@ -15,22 +16,22 @@ type Mutation {
   updatePost(id: ID!, description: String): Post
   deletePost(id: ID!): Post
   vote(postId: ID!): Vote
-  createAvitar(
+  createAvatar(
     name: String!
     color0: String!
     color1: String!
     color2: String!
     color3: String!
     color4: String!
-  ): Avitar
-  changeAvitar(
+  ): Avatar
+  changeAvatar(
     name: String!
     color0: String!
     color1: String!
     color2: String!
     color3: String!
     color4: String!
-  ): Avitar
+  ): Avatar
 }
 
 type Feed {
@@ -71,7 +72,7 @@ type User {
   email: String!
   posts: [Post!]!
   #votes: [Vote!]!
-  avitar: Avitar!
+  avatar: Avatar!
 }
 
 type Subscription {
@@ -85,7 +86,7 @@ type Vote {
   user: User!
 }
 
-type Avitar {
+type Avatar {
   id: ID!
   name: String!
   color0: String!
@@ -94,6 +95,12 @@ type Avitar {
   color3: String!
   color4: String!
   user: User
+}
+
+type AvatarStyle {
+  id: ID!
+  name: String!
+  alias: String
 }
 
 input PostOrderByInput {

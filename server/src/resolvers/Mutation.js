@@ -1,5 +1,5 @@
 const bcrypt = require("bcryptjs");
-const { createAvitar, changeAvitar } = require("./Avitar");
+const { createAvatar, changeAvatar } = require("./Avitar");
 const jwt = require("jsonwebtoken");
 const { APP_SECRET, getUserId } = require("../utils");
 const { PrismaClient } = require("@prisma/client");
@@ -190,6 +190,6 @@ module.exports = {
   updatePost,
   deletePost,
   comment,
-  createAvitar,
-  changeAvitar,
+  createAvatar,
+  changeAvatar,
 };

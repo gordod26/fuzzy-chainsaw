@@ -4,7 +4,7 @@ const { APP_SECRET, getUserId } = require("../utils");
 const { PrismaClient } = require("@prisma/client");
 const prisma = new PrismaClient();
 
-async function createAvitar(parent, args, context, info) {
+async function createAvatar(parent, args, context, info) {
   const { userId } = context;
 
   if (userId === null) throw new Error("Not Authenticated");
@@ -23,7 +23,7 @@ async function createAvitar(parent, args, context, info) {
   return newAvitar;
 }
 
-async function changeAvitar(parent, args, context, info) {
+async function changeAvatar(parent, args, context, info) {
   const { userId } = context;
 
   if (userId === null) throw new Error("Not Authenticated");
@@ -44,7 +44,7 @@ async function changeAvitar(parent, args, context, info) {
   return newAvitar;
 }
 
-async function getAvitar(parent, args, context, info) {
+async function getAvatar(parent, args, context, info) {
   const userId = Number(args.userId);
 
   const avitar = await prisma.avitar.findUnique({
@@ -55,8 +55,19 @@ async function getAvitar(parent, args, context, info) {
   return avitar;
 }
 
+async function getStyle(parent, args, context, info) {
+  const id = Number(args.id);
+
+  const avitarStyle = await prisma.avitarStyles.findUnique({
+    where: { id },
+  });
+  console.log("get avitarStyle " + id);
+  return avitarStyle;
+}
+
 module.exports = {
-  createAvitar,
-  changeAvitar,
-  getAvitar,
+  createAvatar,
+  changeAvatar,
+  getAvatar,
+  getStyle,
 };

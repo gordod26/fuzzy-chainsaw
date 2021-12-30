@@ -1,4 +1,5 @@
 import StoresContext from "../../util/context";
+import { gql, useMutation, useQuery } from "@apollo/client";
 import mstContext from "../../util/mstContext";
 import colors from "nice-color-palettes";
 import { randomColors } from "../../helpers/colors";
@@ -8,9 +9,16 @@ import { useContext, useEffect, useState } from "react";
 import AuthModelBody from "./../AuthModelBody";
 import Avatar from "boring-avatars";
 import ColorGroup from "./ColorSamples/ColorSampleGroup";
+import SampleAvatar from "./SampleAvatar";
+import { CHANGE_AVATAR } from "../../helpers/mutations";
+import { GET_AVATAR } from "../../helpers/querys";
+import { AUTH_TOKEN } from "../../constants/constants";
+
+interface IAvatarModal {}
 
 // #2 create model to confirm delete
-const AvitarModal = observer((props: any) => {
+const AvatarModal = observer((props: any) => {
+  const authToken = localStorage.getItem(AUTH_TOKEN);
   const store = useContext(StoresContext);
   const mstStore = useContext(mstContext);
   const [colors, setColors] = useState([
@@ -20,18 +28,50 @@ const AvitarModal = observer((props: any) => {
     "#f38630",
     "#fa6900",
   ]);
+  const [selected, setSelected] = useState<string>();
+
+  const [changeMutation] = useMutation(CHANGE_AVATAR, {
+    context: {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${authToken}`,
+      },
+    },
+    variables: {
+      name: String(selected),
+      color0: String(colors[0]),
+      color1: String(colors[1]),
+      color2: String(colors[2]),
+      color3: String(colors[3]),
+      color4: String(colors[4]),
+    },
+    refetchQueries: [GET_AVATAR],
+    onCompleted: (changeMutation) => {
+      console.log(changeMutation);
+    },
+  });
 
   const handleSave = () => {
+    if (selected) {
+      changeMutation();
+    }
     mstStore.modals.toggleModel();
   };
-
   const handleClose = () => {
     mstStore.modals.toggleModel();
   };
+  const handleSelect = (AvitarName: string) => {
+    if (selected === AvitarName) {
+      setSelected(undefined);
+    } else {
+      setSelected(AvitarName);
+    }
+  };
 
   useEffect(() => {
-    console.log(colors);
-  }, []);
+    console.debug(colors);
+    console.debug(selected);
+  }, [selected, colors]);
 
   return (
     <div className="modal modal-open">
@@ -54,62 +94,45 @@ const AvitarModal = observer((props: any) => {
           </div>
         </div>
         <div className="grid grid-cols-3 grid-overflow-auto gap-5 place-items-center max-h-96">
-          <div>
-            <Avatar
-              size={50}
-              name="Matthew"
-              variant="beam"
-              colors={[colors[0], colors[1], colors[2], colors[3], colors[4]]}
-            />
-            <p className="flex justify-center font-light pt-2">John</p>
-          </div>
-          <div>
-            <Avatar
-              size={50}
-              name="John"
-              variant="beam"
-              colors={[colors[0], colors[1], colors[2], colors[3], colors[4]]}
-            />
-            <p className="flex justify-center font-light pt-2">John</p>
-          </div>
-          <div>
-            <Avatar
-              size={50}
-              name="Luke"
-              variant="beam"
-              colors={[colors[0], colors[1], colors[2], colors[3], colors[4]]}
-            />
-            <p className="flex justify-center font-light pt-2">Luke</p>
-          </div>
-          <div>
-            <Avatar
-              size={50}
-              name="Jacob"
-              variant="beam"
-              colors={[colors[0], colors[1], colors[2], colors[3], colors[4]]}
-            />
-            <p className="flex justify-center font-light pt-2">Jacob</p>
-          </div>
-          <div>
-            <Avatar
-              size={50}
-              name="Mary"
-              variant="beam"
-              colors={[colors[0], colors[1], colors[2], colors[3], colors[4]]}
-            />
-            <p className="flex justify-center font-light pt-2">Mary</p>
-          </div>
-          <div>
-            <Avatar
-              size={50}
-              name="David"
-              variant="beam"
-              colors={[colors[0], colors[1], colors[2], colors[3], colors[4]]}
-            />
-            <p className="flex justify-center font-light pt-2">David</p>
-          </div>
+          <SampleAvatar
+            AvatarId={1}
+            colors={colors}
+            handleSelect={handleSelect}
+            selected={selected}
+          />
+          <SampleAvatar
+            AvatarId={2}
+            colors={colors}
+            handleSelect={handleSelect}
+            selected={selected}
+          />
+          <SampleAvatar
+            AvatarId={3}
+            colors={colors}
+            handleSelect={handleSelect}
+            selected={selected}
+          />
+          <SampleAvatar
+            AvatarId={4}
+            colors={colors}
+            handleSelect={handleSelect}
+            selected={selected}
+          />
+          <SampleAvatar
+            AvatarId={5}
+            colors={colors}
+            handleSelect={handleSelect}
+            selected={selected}
+          />
+          <SampleAvatar
+            AvatarId={6}
+            colors={colors}
+            handleSelect={handleSelect}
+            selected={selected}
+          />
         </div>
         <div className="flex justify-end mt-3">
+          {/*save & close buttons*/}
           <button
             className="btn btn-circle btn-sm btn-warning m-3"
             onClick={handleClose}
@@ -153,4 +176,4 @@ const AvitarModal = observer((props: any) => {
   );
 });
 
-export default AvitarModal;
+export default AvatarModal;

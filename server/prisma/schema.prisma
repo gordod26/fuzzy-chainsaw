@@ -66,6 +66,12 @@ model Avitar {
   color4 String @default("#60b99a")
 }
 
+model AvitarStyles {
+  id Int @id @default(autoincrement())
+  name String
+  alias String
+}
+
 model Tags {
   id     Int  @id @default(autoincrement())
   name   String @unique

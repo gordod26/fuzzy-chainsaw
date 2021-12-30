@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import UserAvatar from "../Avitar/UserAvatar";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import Avatar from "boring-avatars";
 import { useContext } from "react";
@@ -9,7 +10,6 @@ import { AUTH_TOKEN, AUTH_ID } from "../../constants/constants";
 import { QUERY_POSTS } from "./CommentFeed";
 import { timeDifferenceForDate } from "../../helpers/time";
 import DeleteCommentModal from "../Modals/DeleteComment";
-import { GET_AVITAR } from "../../helpers/querys";
 import { DELETE_POST_MUTATION, VOTE_MUTATION } from "../../helpers/mutations";
 
 const CommentCard = observer((props: any): JSX.Element => {
@@ -52,45 +52,12 @@ const CommentCard = observer((props: any): JSX.Element => {
     },
   });
 
-  const { loading, error, data } = useQuery(GET_AVITAR, {
-    variables: {
-      userId: Number(props.userId),
-    },
-  });
-
   //console logs ->
-  useEffect(() => {
-    //if(loading) {console.debug("avitar loading,", props.userId)}
-    //if(error) {console.debug("getavitar error,", error , props.userId)}
-    //if(data) { console.debug("avitar data", data, Number(props.userId))}
-    //console.log("id", props.id);
-    //console.log("props.time", props.time);
-  }, [loading, error, data, props.userId]);
   return (
     <>
       <div className={`flex justify-left items-start pb-5 ${props.indent}`}>
         <div className="self-start mt-0">
-          {data ? (
-            <Avatar
-              size={props.avatarSize}
-              name={data.getAvitar.name}
-              variant="beam"
-              colors={[
-                data.getAvitar.color0,
-                data.getAvitar.color1,
-                data.getAvitar.color2,
-                data.getAvitar.color3,
-                data.getAvitar.color4,
-              ]}
-            />
-          ) : (
-            <Avatar
-              size={props.avatarSize}
-              name="Eunice Kennedy"
-              variant="marble"
-              colors={["#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff"]}
-            />
-          )}
+          <UserAvatar userId={props.userId} avitarSize={props.avitarSize} />
         </div>
         <div className={"flex flex-col pl-3 text-sm"}>
           <div>

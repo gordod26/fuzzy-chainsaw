@@ -1,4 +1,5 @@
 import React from "react";
+import UserAvatar from "../Avitar/UserAvatar";
 import Avatar from "boring-avatars";
 import TextareaAutosize from "react-textarea-autosize";
 import { useContext } from "react";
@@ -8,13 +9,14 @@ import { AUTH_ID, AUTH_NAME, AUTH_TOKEN } from "../../constants/constants";
 import { gql, useMutation, useQuery } from "@apollo/client";
 import { QUERY_POSTS } from "./CommentFeed";
 import { MUTATION_POST } from "../../helpers/mutations";
-import { GET_AVITAR } from "../../helpers/querys";
+import { GET_AVATAR } from "../../helpers/querys";
 
 interface Itextarea {
   textarea: JSX.Element;
 }
 
 const PostCard = observer(function PostCard(): JSX.Element {
+  const authId = Number(localStorage.getItem(AUTH_ID));
   const store = useContext(StoresContext);
   const [postMutation] = useMutation(MUTATION_POST, {
     context: {
@@ -32,35 +34,16 @@ const PostCard = observer(function PostCard(): JSX.Element {
     },
   });
 
-  const { loading, error, data } = useQuery(GET_AVITAR, {
+  const { loading, error, data } = useQuery(GET_AVATAR, {
     variables: {
-      userId: Number(localStorage.getItem(AUTH_ID)),
+      userId: authId,
     },
   });
 
   return (
     <div className="flex justify-left items-start mb-5">
       <div className="self-start mt-0">
-        <Avatar
-          size={40}
-          name={
-            store.authStore.isAuthenticated && data
-              ? data.getAvitar.name
-              : "Bessie Coleman"
-          }
-          variant={store.authStore.isAuthenticated && data ? "beam" : "marble"}
-          colors={
-            store.authStore.isAuthenticated && data
-              ? [
-                  data.getAvitar.color0,
-                  data.getAvitar.color1,
-                  data.getAvitar.color2,
-                  data.getAvitar.color3,
-                  data.getAvitar.color4,
-                ]
-              : ["#ffffff", "#ffffff", "#ffffff", "#ffffff", "#ffffff"]
-          }
-        />
+        <UserAvatar userId={authId ? authId : 11} avitarSize={40} />
       </div>
       <div className={"flex flex-col flex-grow pl-3 text-sm"}>
         <div>

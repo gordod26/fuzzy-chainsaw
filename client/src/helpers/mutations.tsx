@@ -40,3 +40,24 @@ export const MUTATION_POST = gql`
   }
 `;
 
+export const CHANGE_AVATAR = gql`
+  mutation Mutation(
+    $name: String!
+    $color0: String!
+    $color1: String!
+    $color2: String!
+    $color3: String!
+    $color4: String!
+  ) {
+    changeAvatar(
+      name: $name
+      color0: $color0
+      color1: $color1
+      color2: $color2
+      color3: $color3
+      color4: $color4
+    ) {
+      id
+    }
+  }
+`;
